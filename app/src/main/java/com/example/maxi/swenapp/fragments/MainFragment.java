@@ -14,7 +14,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.example.maxi.swenapp.R;
-import com.example.maxi.swenapp.activities.Loco;
+import com.example.maxi.swenapp.activities.TabsActivity;
 import com.facebook.AccessToken;
 import com.facebook.AccessTokenTracker;
 import com.facebook.CallbackManager;
@@ -102,7 +102,7 @@ public class MainFragment extends Fragment {
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                startActivity(new Intent(getActivity(), Loco.class));
+                startActivity(new Intent(getActivity(), TabsActivity.class));
             }
         });
         button.setVisibility(View.GONE);
@@ -166,7 +166,7 @@ public class MainFragment extends Fragment {
     }
 
     private void showPageListActivity(Context context) throws Throwable {
-        startActivity(new Intent(context, Loco.class));
+        startActivity(new Intent(context, TabsActivity.class));
         getActivity().finish();
     }
 }
