@@ -117,7 +117,7 @@
                 android:layout_width="80dp"
                 android:layout_height="80dp"
                 android:id="@+id/imageView3"
-                android:background="@drawable/ic_favorite"
+                android:background="@drawable/incognito"
                 android:layout_alignParentTop="true"
                 android:layout_alignParentRight="true"
                 android:layout_alignParentEnd="true"
@@ -128,7 +128,7 @@
                 android:layout_width="80dp"
                 android:layout_height="80dp"
                 android:id="@+id/imageView5"
-                android:background="@drawable/ic_favorite"
+                android:background="@drawable/incognito"
                 android:layout_alignParentTop="true"
                 android:layout_centerHorizontal="true" />
 
@@ -136,7 +136,7 @@
                 android:layout_width="80dp"
                 android:layout_height="80dp"
                 android:id="@+id/imageView6"
-                android:background="@drawable/ic_favorite"
+                android:background="@drawable/incognito"
                 android:layout_above="@+id/imageView4"
                 android:layout_marginLeft="33dp"
                 android:layout_alignParentLeft="true"
@@ -147,7 +147,7 @@
                 android:layout_width="80dp"
                 android:layout_height="80dp"
                 android:id="@+id/imageView4"
-                android:background="@drawable/ic_favorite"
+                android:background="@drawable/incognito"
                 android:layout_below="@+id/imageView3"
                 android:layout_alignLeft="@+id/imageView3"
                 android:layout_alignStart="@+id/imageView3" />
@@ -156,7 +156,7 @@
                 android:layout_width="80dp"
                 android:layout_height="80dp"
                 android:id="@+id/imageView7"
-                android:background="@drawable/ic_favorite"
+                android:background="@drawable/incognito"
                 android:layout_alignTop="@+id/imageView4"
                 android:layout_alignLeft="@+id/imageView5"
                 android:layout_alignStart="@+id/imageView5" />
@@ -165,7 +165,7 @@
                 android:layout_width="80dp"
                 android:layout_height="80dp"
                 android:id="@+id/imageView8"
-                android:background="@drawable/ic_favorite"
+                android:background="@drawable/incognito"
                 android:layout_alignTop="@+id/imageView4"
                 android:layout_alignLeft="@+id/imageView6"
                 android:layout_alignStart="@+id/imageView6" />

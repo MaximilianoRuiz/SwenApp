@@ -1,6 +1,8 @@
 package com.example.maxi.swenapp.fragments;
 
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.BitmapShader;
@@ -30,7 +32,9 @@ public class PerfilFragment extends Fragment {
     Profile profile = Profile.getCurrentProfile();
 
     ImageView ivProfile;
-    TextView tvName, tvPoints;
+    TextView tvName, tvPoints, tvInsignias;
+
+    SharedPreferences preferences;
 
     public PerfilFragment() {
     }
@@ -42,10 +46,14 @@ public class PerfilFragment extends Fragment {
 
         tvName = (TextView) view.findViewById(R.id.tvName);
         tvPoints = (TextView) view.findViewById(R.id.tvPoint);
+        tvInsignias = (TextView) view.findViewById(R.id.tvInsignias);
         ivProfile = (ImageView) view.findViewById(R.id.ivProfile);
 
+        preferences = getActivity().getPreferences(Context.MODE_PRIVATE);
+
         tvName.setText(profile.getName());
-        tvPoints.setText("20");
+        tvPoints.setText(Integer.toString(preferences.getInt("points", 0)));
+        tvInsignias.setText(Integer.toString(preferences.getInt("insignias", 0)));
 
         Picasso.with(getContext()).load(profile.getProfilePictureUri(70, 70)).transform(new CircleTransform()).into(ivProfile);
 
