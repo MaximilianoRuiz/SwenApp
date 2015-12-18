@@ -2,6 +2,7 @@ package com.example.maxi.swenapp.adapters;
 
 import android.app.FragmentManager;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.net.Uri;
 import android.support.v4.app.FragmentActivity;
 import android.view.LayoutInflater;
@@ -29,6 +30,7 @@ public class PostListAdapter extends ArrayAdapter<PostVO> {
     public List<PostVO> postVOs;
 //    Map<String,List<LocalPostComment>> localPostComments;
 //    Map<String,List<LocalPostLiked>> localPostLikeds;
+    private SharedPreferences prefs;
     public ViewHolder viewHolder;
     public FragmentActivity activity;
 
@@ -40,6 +42,7 @@ public class PostListAdapter extends ArrayAdapter<PostVO> {
         this.activity = fragmentActivity;
 //        this.localPostComments = baseHandler.returnValueComments();
 //        this.localPostLikeds = baseHandler.returnValueLikeds();
+        prefs = context.getSharedPreferences("MisPreferencias", Context.MODE_PRIVATE);
     }
 
     @Override
@@ -76,7 +79,7 @@ public class PostListAdapter extends ArrayAdapter<PostVO> {
                     if (ShareDialog.canShow(ShareLinkContent.class)) {
                         ShareLinkContent linkContent = new ShareLinkContent.Builder()
                                 .setContentTitle(postVOs.get((Integer)view.getTag()).getName())
-                                .setContentDescription("Compartido por QueApp. Buscanos en Play Store")
+                                .setContentDescription("Compartido por SwenApp. Buscanos en Google Play")
                                 .setContentUrl(Uri.parse(postVOs.get((Integer)view.getTag()).getLink()))
                                 .build();
 
@@ -108,6 +111,9 @@ public class PostListAdapter extends ArrayAdapter<PostVO> {
 
                     viewHolder.unlike.setVisibility(View.GONE);
                     viewHolder.like.setVisibility(View.VISIBLE);
+
+                    SharedPreferences.Editor editor = prefs.edit();
+                    editor.putBoolean(id, true);
                 }
             });
 
@@ -118,8 +124,10 @@ public class PostListAdapter extends ArrayAdapter<PostVO> {
 //                    List<LocalPostLiked> postLiked = localPostLikeds.get(id);
 
 //                    dataBaseHandler.upDateLiked(postLiked.get(0).getId(), id, false);
-                    viewHolder.like.setVisibility(View.GONE);
-                    viewHolder.unlike.setVisibility(View.VISIBLE);
+//                    viewHolder.like.setVisibility(View.GONE);
+//                    viewHolder.unlike.setVisibility(View.VISIBLE);
+                    SharedPreferences.Editor editor = prefs.edit();
+                    editor.putBoolean(id, false);
                 }
             });
 
@@ -131,12 +139,23 @@ public class PostListAdapter extends ArrayAdapter<PostVO> {
         PostVO postVO = postVOs.get(position);
         if(postVO != null) {
             viewHolder.share.setTag(position);
+            viewHolder.comment.setTag(position);
+            viewHolder.like.setTag(position);
+            viewHolder.unlike.setTag(position);
             viewHolder.id = postVO.getId();
             viewHolder.name.setText(postVO.getName());
             viewHolder.createdTime.setText(postVO.getCreatedTime());
             viewHolder.message.setText(postVO.getMessage());
             Picasso.with(context).load(postVO.getPicture()).into(viewHolder.picture);
             Picasso.with(context).load(postVO.getFullPicture()).into(viewHolder.fullPicture);
+
+            if(prefs.getBoolean(postVO.getId(), false)){
+                viewHolder.unlike.setVisibility(View.GONE);
+                viewHolder.like.setVisibility(View.VISIBLE);
+            } else {
+                viewHolder.unlike.setVisibility(View.VISIBLE);
+                viewHolder.like.setVisibility(View.GONE);
+            }
 
 //            if(localPostLikeds.containsKey(postVO.getId())) {
 //                List<LocalPostLiked> postLiked = localPostLikeds.get(postVO.getId());
@@ -148,8 +167,8 @@ public class PostListAdapter extends ArrayAdapter<PostVO> {
 //                    viewHolder.like.setVisibility(View.GONE);
 //                    viewHolder.unlike.setVisibility(View.VISIBLE);
 //                }
-                viewHolder.like.setVisibility(View.GONE);
-                viewHolder.unlike.setVisibility(View.VISIBLE);
+//                viewHolder.like.setVisibility(View.GONE);
+//                viewHolder.unlike.setVisibility(View.VISIBLE);
 //            }
         }
 
