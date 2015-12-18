@@ -5,7 +5,7 @@
     android:paddingLeft="10dp"
     android:paddingRight="10dp"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="wrap_content"
     android:background="#ffe8e8e8">
     
     <RelativeLayout
@@ -98,16 +98,16 @@
             android:layout_toStartOf="@+id/btnShare" />
 
         <ImageButton
-        android:layout_width="50dp"
-        android:layout_height="50dp"
-        android:layout_marginLeft="10dp"
-        android:background="@drawable/button_form"
-        android:id="@+id/btnUnLike"
-        android:src="@drawable/ic_unfavorite"
-        android:elevation="10dp"
-        android:layout_alignTop="@+id/btnComment"
-        android:layout_toLeftOf="@+id/btnComment"
-        android:layout_toStartOf="@+id/btnComment" />
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_marginLeft="10dp"
+            android:background="@drawable/button_form"
+            android:id="@+id/btnUnLike"
+            android:src="@drawable/ic_unfavorite"
+            android:elevation="10dp"
+            android:layout_alignTop="@+id/btnComment"
+            android:layout_toLeftOf="@+id/btnComment"
+            android:layout_toStartOf="@+id/btnComment" />
 
         <ImageButton
             android:layout_width="50dp"

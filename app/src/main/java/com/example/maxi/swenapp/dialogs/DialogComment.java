@@ -12,14 +12,14 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.example.maxi.swenapp.R;
-import com.example.maxi.swenapp.data.LocalPostDataBaseHandler;
+import com.example.maxi.swenapp.data.DataBaseCommentsHandler;
 
 
 public class DialogComment extends DialogFragment{
 
     EditText etComment;
     private Context context;
-    private LocalPostDataBaseHandler dataBaseHandler;
+    private DataBaseCommentsHandler dataBaseHandler;
     private String postId;
 
     public DialogComment(Context context, String postId) {
@@ -30,7 +30,7 @@ public class DialogComment extends DialogFragment{
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
 
-        dataBaseHandler = new LocalPostDataBaseHandler(context);
+        dataBaseHandler = new DataBaseCommentsHandler(context);
         dataBaseHandler.open();
 
         LayoutInflater inflater = (LayoutInflater) getActivity().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
@@ -50,7 +50,7 @@ public class DialogComment extends DialogFragment{
         builder.setPositiveButton("Comentar", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                dataBaseHandler.insertComment(postId, etComment.getText().toString());
+                dataBaseHandler.insertData(postId, etComment.getText().toString());
                 Toast.makeText(getActivity(), "Comentar: " + etComment.getText().toString(), Toast.LENGTH_SHORT).show();
             }
         });

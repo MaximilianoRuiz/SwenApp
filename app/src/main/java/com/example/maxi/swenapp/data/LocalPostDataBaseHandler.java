@@ -5,7 +5,6 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
-import android.test.mock.MockCursor;
 import android.util.Log;
 
 import com.example.maxi.swenapp.VOs.LocalPostComment;
@@ -89,11 +88,7 @@ public class LocalPostDataBaseHandler {
     }
 
     public Cursor returnComments() {
-        try {
             return db.query(TABLE_LOCAL_POST_COMMENT, new String[]{ID, POST_ID, COMMENT}, null, null, null, null, null);
-        }catch (Exception e){
-            return new MockCursor();
-        }
     }
 
     public int upDateComment(int id, String postId, String comment){

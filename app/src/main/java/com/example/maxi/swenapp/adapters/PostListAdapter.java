@@ -11,38 +11,50 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.maxi.swenapp.R;
+import com.example.maxi.swenapp.VOs.LocalPostComment;
+import com.example.maxi.swenapp.VOs.LocalPostLiked;
 import com.example.maxi.swenapp.VOs.PostVO;
+import com.example.maxi.swenapp.data.DataBaseCommentsHandler;
+import com.example.maxi.swenapp.data.DataBaseLikeHandler;
 import com.example.maxi.swenapp.dialogs.DialogComment;
 import com.facebook.FacebookSdk;
 import com.facebook.share.model.ShareLinkContent;
 import com.facebook.share.widget.ShareDialog;
 import com.squareup.picasso.Picasso;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 public class PostListAdapter extends ArrayAdapter<PostVO> {
 
     Context context;
-    //private LocalPostDataBaseHandler dataBaseHandler;
+    private DataBaseLikeHandler dataBaseLikeHandler;
+    private DataBaseCommentsHandler dataBaseCommentHandle;
     public List<PostVO> postVOs;
-//    Map<String,List<LocalPostComment>> localPostComments;
-//    Map<String,List<LocalPostLiked>> localPostLikeds;
     private SharedPreferences prefs;
     public ViewHolder viewHolder;
     public FragmentActivity activity;
 
+    private Map<String, LocalPostLiked> stringLocalPostLikedMap;
+    Map<String, List<LocalPostComment>> valueComments;
+    Map<String, List<LocalPostComment>> commentsListMaps;
+
     public PostListAdapter(Context c, List<PostVO> postVOs, FragmentActivity fragmentActivity) {
         super(c, R.layout.post_list_adapter_row, postVOs);
-//        LocalPostDataBaseHandler baseHandler = new LocalPostDataBaseHandler(context);
         this.context = c;
         this.postVOs = postVOs;
         this.activity = fragmentActivity;
-//        this.localPostComments = baseHandler.returnValueComments();
-//        this.localPostLikeds = baseHandler.returnValueLikeds();
         prefs = context.getSharedPreferences("MisPreferencias", Context.MODE_PRIVATE);
+        dataBaseLikeHandler = new DataBaseLikeHandler(c);
+        dataBaseCommentHandle = new DataBaseCommentsHandler(c);
+        dataBaseCommentHandle.open();
+        reloadListComments();
     }
 
     @Override
@@ -50,9 +62,6 @@ public class PostListAdapter extends ArrayAdapter<PostVO> {
 
         if(convertView==null) {
             LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-
-//            dataBaseHandler = new LocalPostDataBaseHandler(context);
-//            dataBaseHandler.open();
 
             convertView = inflater.inflate(R.layout.post_list_adapter_row, parent, false);
 
@@ -68,6 +77,12 @@ public class PostListAdapter extends ArrayAdapter<PostVO> {
             viewHolder.unlike = (ImageButton) convertView.findViewById(R.id.btnUnLike);
             viewHolder.like = (ImageButton) convertView.findViewById(R.id.btnLike);
             viewHolder.comment = (ImageButton) convertView.findViewById(R.id.btnComment);
+
+            viewHolder.listView = (ListView) convertView.findViewById(R.id.listView2);
+
+            dataBaseLikeHandler.open();
+
+            stringLocalPostLikedMap = dataBaseLikeHandler.returnValue();
 
             viewHolder.share.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -94,6 +109,7 @@ public class PostListAdapter extends ArrayAdapter<PostVO> {
                     FragmentManager fragmentManager = activity.getFragmentManager();
                     DialogComment dialogo = new DialogComment(context, postVOs.get((Integer)view.getTag()).getId());
                     dialogo.show(fragmentManager, "tagAlerta");
+                    reloadListComments();
                 }
             });
 
@@ -102,18 +118,17 @@ public class PostListAdapter extends ArrayAdapter<PostVO> {
                 public void onClick(View view) {
                     String id = postVOs.get((Integer)view.getTag()).getId();
 
-//                    if(localPostLikeds.containsKey(id)){
-//                        List<LocalPostLiked> postLiked = localPostLikeds.get(id);
-////                        dataBaseHandler.upDateLiked(postLiked.get(0).getId(), id, true);
-//                    } else {
-////                        dataBaseHandler.insertLiked(id, true);
-//                    }
-
                     viewHolder.unlike.setVisibility(View.GONE);
                     viewHolder.like.setVisibility(View.VISIBLE);
 
-                    SharedPreferences.Editor editor = prefs.edit();
-                    editor.putBoolean(id, true);
+                    Toast.makeText(context, "Me gusta +1", Toast.LENGTH_LONG).show();
+
+                    if(!stringLocalPostLikedMap.containsKey(id)){
+                        dataBaseLikeHandler.insertData(id, true);
+                    } else {
+                        LocalPostLiked localPostLiked = stringLocalPostLikedMap.get(id);
+                        dataBaseLikeHandler.upDate(localPostLiked.getId(), localPostLiked.getPostID(), true);
+                    }
                 }
             });
 
@@ -121,13 +136,14 @@ public class PostListAdapter extends ArrayAdapter<PostVO> {
                 @Override
                 public void onClick(View view) {
                     String id = postVOs.get((Integer)view.getTag()).getId();
-//                    List<LocalPostLiked> postLiked = localPostLikeds.get(id);
 
-//                    dataBaseHandler.upDateLiked(postLiked.get(0).getId(), id, false);
-//                    viewHolder.like.setVisibility(View.GONE);
-//                    viewHolder.unlike.setVisibility(View.VISIBLE);
-                    SharedPreferences.Editor editor = prefs.edit();
-                    editor.putBoolean(id, false);
+                    viewHolder.unlike.setVisibility(View.VISIBLE);
+                    viewHolder.like.setVisibility(View.GONE);
+
+                    Toast.makeText(context, "Me gusta -1", Toast.LENGTH_LONG).show();
+
+                    LocalPostLiked localPostLiked = stringLocalPostLikedMap.get(id);
+                    dataBaseLikeHandler.upDate(localPostLiked.getId(), localPostLiked.getPostID(), false);
                 }
             });
 
@@ -149,30 +165,36 @@ public class PostListAdapter extends ArrayAdapter<PostVO> {
             Picasso.with(context).load(postVO.getPicture()).into(viewHolder.picture);
             Picasso.with(context).load(postVO.getFullPicture()).into(viewHolder.fullPicture);
 
-            if(prefs.getBoolean(postVO.getId(), false)){
-                viewHolder.unlike.setVisibility(View.GONE);
-                viewHolder.like.setVisibility(View.VISIBLE);
+            if(stringLocalPostLikedMap.containsKey(postVO.getId())){
+               if(stringLocalPostLikedMap.get(postVO.getId()).isLiked()){
+                   viewHolder.unlike.setVisibility(View.GONE);
+                   viewHolder.like.setVisibility(View.VISIBLE);
+               }else {
+                   viewHolder.unlike.setVisibility(View.VISIBLE);
+                   viewHolder.like.setVisibility(View.GONE);
+               }
             } else {
                 viewHolder.unlike.setVisibility(View.VISIBLE);
                 viewHolder.like.setVisibility(View.GONE);
             }
 
-//            if(localPostLikeds.containsKey(postVO.getId())) {
-//                List<LocalPostLiked> postLiked = localPostLikeds.get(postVO.getId());
-//
-//                if(postLiked.get(0).isLiked()){
-//                    viewHolder.unlike.setVisibility(View.GONE);
-//                    viewHolder.like.setVisibility(View.VISIBLE);
-//                } else{
-//                    viewHolder.like.setVisibility(View.GONE);
-//                    viewHolder.unlike.setVisibility(View.VISIBLE);
-//                }
-//                viewHolder.like.setVisibility(View.GONE);
-//                viewHolder.unlike.setVisibility(View.VISIBLE);
-//            }
+            if(commentsListMaps.containsKey(postVO.getId())){
+                List<LocalPostComment> localPostComments = commentsListMaps.get(postVO.getId());
+                List<String> list = new ArrayList<>();
+                for(LocalPostComment localPostComment : localPostComments){
+                    list.add(localPostComment.getComment());
+                }
+                viewHolder.listView.setAdapter(new ArrayAdapter(context, android.R.layout.simple_list_item_1, list));
+            } else {
+                viewHolder.listView.setAdapter(new ArrayAdapter(context, android.R.layout.simple_list_item_1, new ArrayList()));
+            }
         }
 
         return convertView;
+    }
+
+    private void reloadListComments(){
+        commentsListMaps = dataBaseCommentHandle.returnValue();
     }
 
     static class ViewHolder {
@@ -180,5 +202,6 @@ public class PostListAdapter extends ArrayAdapter<PostVO> {
         TextView name, createdTime, message;
         ImageView picture, fullPicture;
         ImageButton share,unlike, like, comment;
+        ListView listView;
     }
 }
