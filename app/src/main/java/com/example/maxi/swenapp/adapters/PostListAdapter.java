@@ -41,6 +41,8 @@ public class PostListAdapter extends ArrayAdapter<PostVO> {
     public ViewHolder viewHolder;
     public FragmentActivity activity;
 
+    SharedPreferences preferences;
+
     private Map<String, LocalPostLiked> stringLocalPostLikedMap;
     Map<String, List<LocalPostComment>> valueComments;
     Map<String, List<LocalPostComment>> commentsListMaps;
@@ -55,6 +57,7 @@ public class PostListAdapter extends ArrayAdapter<PostVO> {
         dataBaseCommentHandle = new DataBaseCommentsHandler(c);
         dataBaseCommentHandle.open();
         reloadListComments();
+        preferences = fragmentActivity.getSharedPreferences("MyShared", Context.MODE_PRIVATE);
     }
 
     @Override
@@ -99,6 +102,22 @@ public class PostListAdapter extends ArrayAdapter<PostVO> {
                                 .build();
 
                         shareDialog.show(linkContent);
+
+                        int points = preferences.getInt("points", 0);
+                        points = points + 10;
+
+                        SharedPreferences.Editor editor = preferences.edit();
+                        editor.putInt("points", points);
+                        editor.commit();
+
+
+                        int share = preferences.getInt("share", 0);
+                        share = share + 1;
+
+                        SharedPreferences.Editor editorShare = preferences.edit();
+                        editorShare.putInt("share", share);
+                        editorShare.commit();
+
                     }
                 }
             });
@@ -110,6 +129,21 @@ public class PostListAdapter extends ArrayAdapter<PostVO> {
                     DialogComment dialogo = new DialogComment(context, postVOs.get((Integer)view.getTag()).getId());
                     dialogo.show(fragmentManager, "tagAlerta");
                     reloadListComments();
+
+                    int points = preferences.getInt("points", 0);
+                    points = points + 5;
+
+                    SharedPreferences.Editor editor = preferences.edit();
+                    editor.putInt("points", points);
+                    editor.commit();
+
+                    int comment = preferences.getInt("comment", 0);
+                    comment = comment + 1;
+
+                    SharedPreferences.Editor editorComment = preferences.edit();
+                    editorComment.putInt("comment", comment);
+                    editorComment.commit();
+
                 }
             });
 
@@ -129,6 +163,23 @@ public class PostListAdapter extends ArrayAdapter<PostVO> {
                         LocalPostLiked localPostLiked = stringLocalPostLikedMap.get(id);
                         dataBaseLikeHandler.upDate(localPostLiked.getId(), localPostLiked.getPostID(), true);
                     }
+
+                    int points = preferences.getInt("points", 0);
+                    points = points + 1;
+
+                    SharedPreferences.Editor editor = preferences.edit();
+                    editor.putInt("points", points);
+                    editor.commit();
+
+                    int like = preferences.getInt("like", 0);
+                    like = like + 1;
+
+                    SharedPreferences.Editor editorLike = preferences.edit();
+                    editorLike.putInt("like", like);
+                    editorLike.commit();
+
+                    stringLocalPostLikedMap = dataBaseLikeHandler.returnValue();
+
                 }
             });
 
@@ -143,7 +194,13 @@ public class PostListAdapter extends ArrayAdapter<PostVO> {
                     Toast.makeText(context, "Me gusta -1", Toast.LENGTH_LONG).show();
 
                     LocalPostLiked localPostLiked = stringLocalPostLikedMap.get(id);
-                    dataBaseLikeHandler.upDate(localPostLiked.getId(), localPostLiked.getPostID(), false);
+                    try{
+                        dataBaseLikeHandler.upDate(localPostLiked.getId(), localPostLiked.getPostID(), false);
+                    } catch (Exception e){
+                        //todo;
+                    }
+
+                    stringLocalPostLikedMap = dataBaseLikeHandler.returnValue();
                 }
             });
 

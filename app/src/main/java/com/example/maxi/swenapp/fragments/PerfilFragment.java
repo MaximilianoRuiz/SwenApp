@@ -36,7 +36,16 @@ public class PerfilFragment extends Fragment {
 
     SharedPreferences preferences;
 
+    private static PerfilFragment instance;
+
     public PerfilFragment() {
+    }
+
+    public static PerfilFragment getInstance(){
+        if (instance == null){
+            instance = new PerfilFragment();
+        }
+        return instance;
     }
 
     @Override
@@ -49,7 +58,7 @@ public class PerfilFragment extends Fragment {
         tvInsignias = (TextView) view.findViewById(R.id.tvInsignias);
         ivProfile = (ImageView) view.findViewById(R.id.ivProfile);
 
-        preferences = getActivity().getPreferences(Context.MODE_PRIVATE);
+        preferences = getActivity().getSharedPreferences("MyShared",Context.MODE_PRIVATE);
 
         tvName.setText(profile.getName());
         tvPoints.setText(Integer.toString(preferences.getInt("points", 0)));
@@ -58,6 +67,11 @@ public class PerfilFragment extends Fragment {
         Picasso.with(getContext()).load(profile.getProfilePictureUri(70, 70)).transform(new CircleTransform()).into(ivProfile);
 
         return view;
+    }
+
+    public void setValues(){
+        tvPoints.setText(Integer.toString(preferences.getInt("points", 0)));
+        tvInsignias.setText(Integer.toString(preferences.getInt("insignias", 0)));
     }
 
     private Bitmap obtainCircleImage(Uri uri){
