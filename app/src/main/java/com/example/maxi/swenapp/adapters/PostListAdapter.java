@@ -124,10 +124,10 @@ public class PostListAdapter extends ArrayAdapter<PostVO> {
                         Desafios desafios = new Desafios(context, preferences, fragmentManager);
 
                         if((postVOs.get((Integer)view.getTag()).getMessage().contains("#SentiteComodo"))){
-                            int shareSentiteComodo = preferences.getInt("shareSentiteComoda", 0);
+                            int shareSentiteComodo = preferences.getInt("shareSentiteComodo", 0);
                             shareSentiteComodo = shareSentiteComodo + 1;
 
-                            editorShare.putInt("shareSentiteComoda", shareSentiteComodo);
+                            editorShare.putInt("shareSentiteComodo", shareSentiteComodo);
                         }
 
                         if((postVOs.get((Integer)view.getTag()).getMessage().contains("#Gifcard"))){

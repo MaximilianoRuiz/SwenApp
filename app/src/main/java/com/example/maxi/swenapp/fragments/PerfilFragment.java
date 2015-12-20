@@ -108,18 +108,35 @@ public class PerfilFragment extends Fragment {
     }
 
     public void setValues(){
-        tvPoints.setText(Integer.toString(preferences.getInt("points", 0)));
-        tvInsignias.setText(Integer.toString(preferences.getInt("insignias", 0)));
+        int insignias = 0;
 
         if(!preferences.getBoolean("Newbie", true)){
             newbi.setBackgroundResource(R.drawable.newbie);
+            insignias ++;
         }
         if(!preferences.getBoolean("Explorer", true)){
             explorer.setBackgroundResource(R.drawable.explorer);
+            insignias ++;
         }
         if(!preferences.getBoolean("Influencer", true)){
             influence.setBackgroundResource(R.drawable.influencer);
+            insignias ++;
         }
+        if(!preferences.getBoolean("Vaqueria", true)){
+            vaqueria.setBackgroundResource(R.drawable.vaqueria);
+            insignias ++;
+        }
+        if(!preferences.getBoolean("Wamu", true)){
+            wambu.setBackgroundResource(R.drawable.wamu);
+            insignias ++;
+        }
+        if(!preferences.getBoolean("Daily", true)){
+            daily.setBackgroundResource(R.drawable.daily);
+            insignias ++;
+        }
+
+        tvPoints.setText(Integer.toString(preferences.getInt("points", 0)));
+        tvInsignias.setText(Integer.toString(insignias));
     }
 
     private Bitmap obtainCircleImage(Uri uri){
