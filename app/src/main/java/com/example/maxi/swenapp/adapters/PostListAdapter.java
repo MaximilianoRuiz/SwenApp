@@ -123,9 +123,23 @@ public class PostListAdapter extends ArrayAdapter<PostVO> {
 
                         Desafios desafios = new Desafios(context, preferences, fragmentManager);
 
-                        desafios.getMedallaPorAcciones();
+                        if((postVOs.get((Integer)view.getTag()).getMessage().contains("#SentiteComodo"))){
+                            int shareSentiteComodo = preferences.getInt("shareSentiteComoda", 0);
+                            shareSentiteComodo = shareSentiteComodo + 1;
+
+                            editorShare.putInt("shareSentiteComoda", shareSentiteComodo);
+                        }
+
+                        if((postVOs.get((Integer)view.getTag()).getMessage().contains("#Gifcard"))){
+                            int shareGifCard = preferences.getInt("shareGifCard", 0);
+                            shareGifCard = shareGifCard + 1;
+
+                            editorShare.putInt("shareGifCard", shareGifCard);
+                        }
 
                         PerfilFragment.getInstance().setValues();
+
+                        desafios.getMedallaPorAcciones();
                     }
                 }
             });

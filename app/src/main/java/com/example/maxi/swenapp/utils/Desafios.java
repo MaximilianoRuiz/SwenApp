@@ -64,5 +64,37 @@ public class Desafios {
             DialogMedalla dialogo = new DialogMedalla(context, mensaje, "Influencer", influencer);
             dialogo.show(fragmentManager, "tagAlerta");
         }
+
+        getMedallaDaily();
+        getMedallaWamu();
+        getMedallaVaqueria();
+    }
+
+    public void getMedallaVaqueria(){
+        if(preferences.getInt("shareSentiteComoda", 0) > 4){
+            if(preferences.getInt("shareGifCard", 0) > 0){
+
+            }
+        }
+    }
+
+    public void getMedallaWamu(){
+        if("famele".equals(preferences.getString("gender", "male"))){
+            if(preferences.getInt("shareSentiteComoda", 0) > 4){
+                if(preferences.getInt("shareGifCard", 0) > 0){
+
+                }
+            }
+        }
+    }
+
+    public void getMedallaDaily(){
+        if("male".equals(preferences.getString("gender", "famele"))){
+            if(preferences.getInt("shareSentiteComoda", 0) > 4){
+                if(preferences.getInt("shareGifCard", 0) > 0){
+
+                }
+            }
+        }
     }
 }
