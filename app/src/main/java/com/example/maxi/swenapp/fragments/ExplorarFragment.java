@@ -26,9 +26,18 @@ public class ExplorarFragment extends Fragment {
     private Button btnUpdatePosts;
     private DataBaseHandler dataBaseHandler;
 
-    public ExplorarFragment() {
+    private static ExplorarFragment instance;
 
+    public ExplorarFragment() {
     }
+
+    public static ExplorarFragment getInstance(){
+        if (instance == null){
+            instance = new ExplorarFragment();
+        }
+        return instance;
+    }
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,

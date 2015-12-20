@@ -19,9 +19,15 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.maxi.swenapp.R;
+import com.facebook.AccessToken;
+import com.facebook.GraphRequest;
+import com.facebook.GraphResponse;
 import com.facebook.Profile;
 import com.squareup.picasso.Picasso;
 import com.squareup.picasso.Transformation;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.io.FileNotFoundException;
 import java.io.InputStream;
@@ -33,6 +39,7 @@ public class PerfilFragment extends Fragment {
 
     ImageView ivProfile;
     TextView tvName, tvPoints, tvInsignias;
+    ImageView newbi, explorer, influence, daily, wambu, vaqueria;
 
     SharedPreferences preferences;
 
@@ -58,13 +65,44 @@ public class PerfilFragment extends Fragment {
         tvInsignias = (TextView) view.findViewById(R.id.tvInsignias);
         ivProfile = (ImageView) view.findViewById(R.id.ivProfile);
 
+        newbi = (ImageView) view.findViewById(R.id.newbi);
+        explorer = (ImageView) view.findViewById(R.id.explorer);
+        influence = (ImageView) view.findViewById(R.id.influencer);
+        daily = (ImageView) view.findViewById(R.id.daily);
+        wambu = (ImageView) view.findViewById(R.id.wambu);
+        vaqueria = (ImageView) view.findViewById(R.id.vaqueria);
+
         preferences = getActivity().getSharedPreferences("MyShared",Context.MODE_PRIVATE);
 
         tvName.setText(profile.getName());
-        tvPoints.setText(Integer.toString(preferences.getInt("points", 0)));
-        tvInsignias.setText(Integer.toString(preferences.getInt("insignias", 0)));
+        setValues();
 
         Picasso.with(getContext()).load(profile.getProfilePictureUri(70, 70)).transform(new CircleTransform()).into(ivProfile);
+
+        if(preferences.getBoolean("first", true)){
+            GraphRequest request = GraphRequest.newMeRequest(
+                    AccessToken.getCurrentAccessToken(),
+                    new GraphRequest.GraphJSONObjectCallback() {
+                        @Override
+                        public void onCompleted(JSONObject object, GraphResponse response) {
+
+                            try {
+                                SharedPreferences.Editor editor = preferences.edit();
+                                editor.putString("gender", object.getString("gender").toString());
+                                editor.putBoolean("first", false);
+                                editor.commit();
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
+                        }
+                    });
+
+            Bundle parameters = new Bundle();
+            parameters.putString("fields", "gender");
+            request.setParameters(parameters);
+            request.executeAsync();
+        }
+
 
         return view;
     }
@@ -72,6 +110,16 @@ public class PerfilFragment extends Fragment {
     public void setValues(){
         tvPoints.setText(Integer.toString(preferences.getInt("points", 0)));
         tvInsignias.setText(Integer.toString(preferences.getInt("insignias", 0)));
+
+        if(!preferences.getBoolean("Newbie", true)){
+            newbi.setBackgroundResource(R.drawable.newbie);
+        }
+        if(!preferences.getBoolean("Explorer", true)){
+            explorer.setBackgroundResource(R.drawable.explorer);
+        }
+        if(!preferences.getBoolean("Influencer", true)){
+            influence.setBackgroundResource(R.drawable.influencer);
+        }
     }
 
     private Bitmap obtainCircleImage(Uri uri){

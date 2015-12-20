@@ -19,13 +19,13 @@ public class MyAdapter extends FragmentPagerAdapter {
     public Fragment getItem(int position) {
         Fragment fragment=null;
         if (position==0){
-            fragment = new PerfilFragment();
+            fragment = PerfilFragment.getInstance();
         }
         if (position==1){
             fragment = PagesListFragment.getInstance();
         }
         if (position==2){
-            fragment = new ExplorarFragment();
+            fragment = ExplorarFragment.getInstance();
         }
 
         return fragment;

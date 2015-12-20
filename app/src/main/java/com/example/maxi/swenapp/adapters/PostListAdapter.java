@@ -22,6 +22,8 @@ import com.example.maxi.swenapp.VOs.PostVO;
 import com.example.maxi.swenapp.data.DataBaseCommentsHandler;
 import com.example.maxi.swenapp.data.DataBaseLikeHandler;
 import com.example.maxi.swenapp.dialogs.DialogComment;
+import com.example.maxi.swenapp.fragments.PerfilFragment;
+import com.example.maxi.swenapp.utils.Desafios;
 import com.facebook.FacebookSdk;
 import com.facebook.share.model.ShareLinkContent;
 import com.facebook.share.widget.ShareDialog;
@@ -90,6 +92,7 @@ public class PostListAdapter extends ArrayAdapter<PostVO> {
             viewHolder.share.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
+                    FragmentManager fragmentManager = activity.getFragmentManager();
 
                     FacebookSdk.sdkInitialize(activity);
                     ShareDialog shareDialog = new ShareDialog(activity);
@@ -118,6 +121,11 @@ public class PostListAdapter extends ArrayAdapter<PostVO> {
                         editorShare.putInt("share", share);
                         editorShare.commit();
 
+                        Desafios desafios = new Desafios(context, preferences, fragmentManager);
+
+                        desafios.getMedallaPorAcciones();
+
+                        PerfilFragment.getInstance().setValues();
                     }
                 }
             });
@@ -144,6 +152,11 @@ public class PostListAdapter extends ArrayAdapter<PostVO> {
                     editorComment.putInt("comment", comment);
                     editorComment.commit();
 
+                    Desafios desafios = new Desafios(context, preferences, fragmentManager);
+
+                    desafios.getMedallaPorAcciones();
+
+                    PerfilFragment.getInstance().setValues();
                 }
             });
 
@@ -151,6 +164,7 @@ public class PostListAdapter extends ArrayAdapter<PostVO> {
                 @Override
                 public void onClick(View view) {
                     String id = postVOs.get((Integer)view.getTag()).getId();
+                    FragmentManager fragmentManager = activity.getFragmentManager();
 
                     viewHolder.unlike.setVisibility(View.GONE);
                     viewHolder.like.setVisibility(View.VISIBLE);
@@ -180,6 +194,11 @@ public class PostListAdapter extends ArrayAdapter<PostVO> {
 
                     stringLocalPostLikedMap = dataBaseLikeHandler.returnValue();
 
+                    Desafios desafios = new Desafios(context, preferences, fragmentManager);
+
+                    desafios.getMedallaPorAcciones();
+
+                    PerfilFragment.getInstance().setValues();
                 }
             });
 

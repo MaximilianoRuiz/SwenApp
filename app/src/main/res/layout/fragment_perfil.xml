@@ -116,7 +116,7 @@
             <ImageView
                 android:layout_width="80dp"
                 android:layout_height="80dp"
-                android:id="@+id/imageView3"
+                android:id="@+id/influencer"
                 android:background="@drawable/incognito"
                 android:layout_alignParentTop="true"
                 android:layout_alignParentRight="true"
@@ -127,7 +127,7 @@
             <ImageView
                 android:layout_width="80dp"
                 android:layout_height="80dp"
-                android:id="@+id/imageView5"
+                android:id="@+id/explorer"
                 android:background="@drawable/incognito"
                 android:layout_alignParentTop="true"
                 android:layout_centerHorizontal="true" />
@@ -135,9 +135,9 @@
             <ImageView
                 android:layout_width="80dp"
                 android:layout_height="80dp"
-                android:id="@+id/imageView6"
+                android:id="@+id/newbi"
                 android:background="@drawable/incognito"
-                android:layout_above="@+id/imageView4"
+                android:layout_above="@+id/vaqueria"
                 android:layout_marginLeft="33dp"
                 android:layout_alignParentLeft="true"
                 android:layout_alignParentStart="true" />
@@ -146,29 +146,29 @@
                 android:layout_marginTop="26dp"
                 android:layout_width="80dp"
                 android:layout_height="80dp"
-                android:id="@+id/imageView4"
+                android:id="@+id/vaqueria"
                 android:background="@drawable/incognito"
-                android:layout_below="@+id/imageView3"
-                android:layout_alignLeft="@+id/imageView3"
-                android:layout_alignStart="@+id/imageView3" />
+                android:layout_below="@+id/influencer"
+                android:layout_alignLeft="@+id/influencer"
+                android:layout_alignStart="@+id/influencer" />
 
             <ImageView
                 android:layout_width="80dp"
                 android:layout_height="80dp"
-                android:id="@+id/imageView7"
+                android:id="@+id/wambu"
                 android:background="@drawable/incognito"
-                android:layout_alignTop="@+id/imageView4"
-                android:layout_alignLeft="@+id/imageView5"
-                android:layout_alignStart="@+id/imageView5" />
+                android:layout_alignTop="@+id/vaqueria"
+                android:layout_alignLeft="@+id/explorer"
+                android:layout_alignStart="@+id/explorer" />
 
             <ImageView
                 android:layout_width="80dp"
                 android:layout_height="80dp"
-                android:id="@+id/imageView8"
+                android:id="@+id/daily"
                 android:background="@drawable/incognito"
-                android:layout_alignTop="@+id/imageView4"
-                android:layout_alignLeft="@+id/imageView6"
-                android:layout_alignStart="@+id/imageView6" />
+                android:layout_alignTop="@+id/vaqueria"
+                android:layout_alignLeft="@+id/newbi"
+                android:layout_alignStart="@+id/newbi" />
 
         </RelativeLayout>
 
