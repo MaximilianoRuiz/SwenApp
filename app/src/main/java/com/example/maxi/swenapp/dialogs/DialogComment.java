@@ -27,6 +27,13 @@ public class DialogComment extends DialogFragment{
         this.postId = postId;
     }
 
+//    @SuppressLint("ValidFragment")
+//    public DialogComment(){
+//        Bundle args = new Bundle();
+//        args.putLong("key", 1);
+//        this.setArguments(args);
+//    }
+
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
 
